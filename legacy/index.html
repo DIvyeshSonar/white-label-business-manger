@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  LANDING PAGE (Homepage)                           -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="landingScreen" class="landing-screen">
+        <div class="landing-bg-decoration">
+            <div class="decoration-circle dec-1"></div>
+            <div class="decoration-circle dec-2"></div>
+            <div class="decoration-circle dec-3"></div>
+        </div>
+
+        <header class="landing-header">
+            <div class="landing-header-inner">
+                <div class="landing-brand">
+                    <div class="landing-logo">🏢</div>
+                    <span class="landing-brand-name">BizManager</span>
+                </div>
+                <div class="landing-header-actions">
+                    <button id="landingLoginBtn" class="btn btn--outline btn--sm">Login</button>
+                    <button id="landingSignupBtn" class="btn btn--primary btn--sm">Sign Up Free</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="landing-hero">
+            <div class="landing-hero-content">
+                <div class="landing-badge">✨ White-Label Business Solution</div>
+                <h1 class="landing-title">
+                    Manage Your Business<br>
+                    <span class="landing-title-accent">Smarter & Faster</span>
+                </h1>
+                <p class="landing-description">
+                    Complete business management — invoicing, inventory, suppliers, customers, and real-time reports.
+                    All in one place, branded just for you.
+                </p>
+                <div class="landing-cta-group">
+                    <button id="landingGetStartedBtn" class="btn btn--primary btn--lg landing-cta-primary">
+                        Get Started Free →
+                    </button>
+                    <button id="landingLoginBtn2" class="btn btn--secondary btn--lg">
+                        Already have an account?
+                    </button>
+                </div>
+                <div class="landing-features">
+                    <div class="feature-pill">📦 Inventory Tracking</div>
+                    <div class="feature-pill">🧾 GST Invoices</div>
+                    <div class="feature-pill">📊 Reports & Analytics</div>
+                    <div class="feature-pill">🏦 Bank Details on Invoice</div>
+                </div>
+            </div>
+            <div class="landing-hero-visual">
+                <div class="hero-card-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dot red"></div>
+                        <div class="mockup-dot yellow"></div>
+                        <div class="mockup-dot green"></div>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="mockup-metrics">
+                        <div class="mockup-metric">
+                            <span class="mockup-metric-label">Total Revenue</span>
+                            <span class="mockup-metric-value">₹2,45,800</span>
+                            <span class="mockup-metric-badge up">▲ 12.4%</span>
+                        </div>
+                        <div class="mockup-metric">
+                            <span class="mockup-metric-label">Net Profit</span>
+                            <span class="mockup-metric-value">₹68,200</span>
+                            <span class="mockup-metric-badge up">▲ 8.1%</span>
+                        </div>
+                        <div class="mockup-metric">
+                            <span class="mockup-metric-label">Inventory Value</span>
+                            <span class="mockup-metric-value">₹1,20,500</span>
+                            <span class="mockup-metric-badge neutral">● Live</span>
+                        </div>
+                    </div>
+                    <div class="mockup-bar-chart">
+                        <div class="bar" style="height: 55%"></div>
+                        <div class="bar" style="height: 75%"></div>
+                        <div class="bar" style="height: 60%"></div>
+                        <div class="bar" style="height: 90%"></div>
+                        <div class="bar" style="height: 70%"></div>
+                        <div class="bar" style="height: 85%"></div>
+                        <div class="bar highlight" style="height: 95%"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  LOGIN SCREEN                                       -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="loginScreen" class="auth-screen hidden">
+        <div class="auth-bg-decoration">
+            <div class="decoration-circle dec-1"></div>
+            <div class="decoration-circle dec-2"></div>
+        </div>
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-card-header">
+                    <div class="auth-logo">🏢</div>
+                    <h2>Welcome back</h2>
+                    <p>Sign in to your BizManager account</p>
+                </div>
+
+                <form id="loginForm" class="auth-form" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="loginUsername">Username</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="loginUsername" class="form-control input-with-icon"
+                                placeholder="Enter your username" required autocomplete="username">
+                        </div>
+                        <span class="field-error" id="loginUsernameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">Password</label>
+                        <div class="input-icon-wrapper">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="loginPassword" class="form-control input-with-icon"
+                                placeholder="Enter your password" required autocomplete="current-password">
+                            <button type="button" class="toggle-password" data-target="loginPassword">👁️</button>
+                        </div>
+                        <span class="field-error" id="loginPasswordError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn--primary btn--full-width auth-submit-btn">
+                        Sign In
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>New to BizManager?</span>
+                    </div>
+
+                    <button type="button" id="goToSignupBtn" class="btn btn--secondary btn--full-width">
+                        Create an Account
+                    </button>
+                </form>
+
+                <button type="button" class="auth-back-btn" id="loginBackBtn">
+                    ← Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  SIGNUP SCREEN                                      -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="signupScreen" class="auth-screen hidden">
+        <div class="auth-bg-decoration">
+            <div class="decoration-circle dec-1"></div>
+            <div class="decoration-circle dec-2"></div>
+        </div>
+        <div class="auth-container auth-container--wide">
+            <div class="auth-card">
+                <div class="auth-card-header">
+                    <div class="auth-logo">🏢</div>
+                    <h2>Create your account</h2>
+                    <p>Start managing your business today</p>
+                </div>
+
+                <form id="signupForm" class="auth-form" novalidate>
+                    <div class="signup-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="signupBusinessName">Business Name *</label>
+                            <input type="text" id="signupBusinessName" class="form-control"
+                                placeholder="e.g. Sharma Traders" required>
+                            <span class="field-error" id="signupBusinessNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="signupOwnerName">Owner Name *</label>
+                            <input type="text" id="signupOwnerName" class="form-control"
+                                placeholder="e.g. Rahul Sharma" required>
+                            <span class="field-error" id="signupOwnerNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="signupEmail">Email Address *</label>
+                            <input type="email" id="signupEmail" class="form-control"
+                                placeholder="rahul@example.com" required>
+                            <span class="field-error" id="signupEmailError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="signupMobile">Mobile Number *</label>
+                            <input type="tel" id="signupMobile" class="form-control"
+                                placeholder="+91 98765 43210" required>
+                            <span class="field-error" id="signupMobileError"></span>
+                        </div>
+
+                        <div class="form-group signup-full-width">
+                            <label class="form-label" for="signupUsername">Username *</label>
+                            <div class="input-icon-wrapper">
+                                <span class="input-icon">@</span>
+                                <input type="text" id="signupUsername" class="form-control input-with-icon"
+                                    placeholder="Choose a unique username" required autocomplete="username">
+                            </div>
+                            <span class="field-error" id="signupUsernameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="signupPassword">Password *</label>
+                            <div class="input-icon-wrapper">
+                                <span class="input-icon">🔒</span>
+                                <input type="password" id="signupPassword" class="form-control input-with-icon"
+                                    placeholder="Min 6 characters" required autocomplete="new-password">
+                                <button type="button" class="toggle-password" data-target="signupPassword">👁️</button>
+                            </div>
+                            <div class="password-strength" id="passwordStrength">
+                                <div class="strength-bar"><div class="strength-fill" id="strengthBar"></div></div>
+                                <span class="strength-label" id="strengthLabel"></span>
+                            </div>
+                            <span class="field-error" id="signupPasswordError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="signupConfirmPassword">Confirm Password *</label>
+                            <div class="input-icon-wrapper">
+                                <span class="input-icon">🔒</span>
+                                <input type="password" id="signupConfirmPassword" class="form-control input-with-icon"
+                                    placeholder="Re-enter your password" required autocomplete="new-password">
+                                <button type="button" class="toggle-password" data-target="signupConfirmPassword">👁️</button>
+                            </div>
+                            <span class="field-error" id="signupConfirmPasswordError"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn--primary btn--full-width auth-submit-btn" style="margin-top: 0.5rem;">
+                        Create Account & Get Started
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>Already have an account?</span>
+                    </div>
+
+                    <button type="button" id="goToLoginBtn" class="btn btn--secondary btn--full-width">
+                        Sign In Instead
+                    </button>
+                </form>
+
+                <button type="button" class="auth-back-btn" id="signupBackBtn">
+                    ← Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  SETUP WIZARD (unchanged layout, reused)           -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="setupWizard" class="setup-wizard hidden">
+        <div class="setup-container">
+            <div class="setup-card card">
+                <div class="card__header">
+                    <h2>Welcome! Let's set up your business</h2>
+                    <p>Tell us a bit more so your invoices and dashboard look just right.</p>
+                </div>
+
+                <div class="card__body">
+                    <form id="setupForm" class="setup-form">
+                        <div class="setup-step">
+                            <h3>Business Information</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="businessName">Business Name *</label>
+                                    <input type="text" id="businessName" class="form-control"
+                                        placeholder="Enter your business name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="proprietorName">Owner/Proprietor Name *</label>
+                                    <input type="text" id="proprietorName" class="form-control"
+                                        placeholder="Enter owner name" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="businessType">Business Type/Specialization</label>
+                                    <input type="text" id="businessType" class="form-control"
+                                        placeholder="e.g., Retail Store, Consulting, Manufacturing">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="gstNumber">Tax/GST Number</label>
+                                    <input type="text" id="gstNumber" class="form-control"
+                                        placeholder="Enter tax/GST number">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="businessPhone">Phone Number</label>
+                                    <input type="tel" id="businessPhone" class="form-control"
+                                        placeholder="Enter phone number">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="businessEmail">Email Address</label>
+                                    <input type="email" id="businessEmail" class="form-control"
+                                        placeholder="Enter email address">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessAddress">Business Address</label>
+                                <textarea id="businessAddress" class="form-control" rows="3"
+                                    placeholder="Enter complete business address"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="businessWebsite">Website (Optional)</label>
+                                <input type="url" id="businessWebsite" class="form-control"
+                                    placeholder="https://www.yourbusiness.com">
+                            </div>
+                        </div>
+
+                        <div class="setup-actions">
+                            <button type="button" id="skipSetup" class="btn btn--outline">Skip for Now</button>
+                            <button type="submit" class="btn btn--primary">Complete Setup</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  MAIN APPLICATION                                   -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="business-logo">
+                        <div id="businessLogoDisplay" class="logo-display">
+                            <div class="logo-icon">🏢</div>
+                        </div>
+                        <div class="business-info">
+                            <h1 id="businessNameDisplay" class="business-name">Your Business Name</h1>
+                            <p id="businessTypeDisplay" class="business-type">Business Management System</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-actions">
+                        <div class="user-badge" id="userBadge">
+                            <span class="user-avatar">👤</span>
+                            <span id="userDisplayName">User</span>
+                        </div>
+                        <button id="settingsBtn" class="btn btn--outline btn--sm">
+                            <span class="btn-icon">⚙️</span>
+                            Settings
+                        </button>
+                        <button id="logoutBtn" class="btn btn--secondary btn--sm">
+                            <span class="btn-icon">🚪</span>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="app-nav">
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li><button class="nav-item active" data-view="dashboard">📊 Dashboard</button></li>
+                    <li><button class="nav-item" data-view="transactions">💼 Purchase &amp; Sales</button></li>
+                    <li><button class="nav-item" data-view="inventory">📦 Inventory</button></li>
+                    <li><button class="nav-item" data-view="suppliers">🏭 Suppliers</button></li>
+                    <li><button class="nav-item" data-view="customers">👥 Customers</button></li>
+                    <li><button class="nav-item" data-view="reports">📈 Reports</button></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <div class="content-container">
+                <!-- Dashboard View -->
+                <div id="dashboardView" class="view-content active">
+                    <div class="view-header">
+                        <h2>Business Dashboard</h2>
+                        <p>Overview of your business performance</p>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="metrics-row">
+                            <div class="metric-card card">
+                                <div class="card__body">
+                                    <div class="metric-content">
+                                        <div class="metric-icon">💰</div>
+                                        <div class="metric-info">
+                                            <h3 id="totalRevenue">₹0</h3>
+                                            <p>Total Revenue</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metric-card card">
+                                <div class="card__body">
+                                    <div class="metric-content">
+                                        <div class="metric-icon">📈</div>
+                                        <div class="metric-info">
+                                            <h3 id="totalProfit">₹0</h3>
+                                            <p>Total Profit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metric-card card">
+                                <div class="card__body">
+                                    <div class="metric-content">
+                                        <div class="metric-icon">📦</div>
+                                        <div class="metric-info">
+                                            <h3 id="inventoryValue">₹0</h3>
+                                            <p>Inventory Value</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="metric-card card">
+                                <div class="card__body">
+                                    <div class="metric-content">
+                                        <div class="metric-icon">⚠️</div>
+                                        <div class="metric-info">
+                                            <h3 id="lowStockCount">0</h3>
+                                            <p>Low Stock Items</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="charts-row">
+                            <div class="chart-card card">
+                                <div class="card__header"><h3>Sales Overview</h3></div>
+                                <div class="card__body">
+                                    <div class="chart-container">
+                                        <canvas id="salesChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="chart-card card">
+                                <div class="card__header"><h3>Top Products</h3></div>
+                                <div class="card__body">
+                                    <div class="chart-container">
+                                        <canvas id="productsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="activity-section">
+                            <div class="activity-card card">
+                                <div class="card__header"><h3>Recent Transactions</h3></div>
+                                <div class="card__body">
+                                    <div id="recentTransactions" class="transaction-list">
+                                        <p class="no-data">No recent transactions</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions View -->
+                <div id="transactionsView" class="view-content">
+                    <div class="view-header">
+                        <h2>Purchase &amp; Sales</h2>
+                        <p>Unified interface for all transactions</p>
+                    </div>
+
+                    <div class="transaction-interface">
+                        <div class="transaction-type-selector">
+                            <div class="type-tabs">
+                                <button id="purchaseTab" class="type-tab active" data-type="purchase">📥 Purchase</button>
+                                <button id="saleTab" class="type-tab" data-type="sale">📤 Sale</button>
+                            </div>
+                        </div>
+
+                        <div class="transaction-form-container">
+                            <form id="transactionForm" class="transaction-form card">
+                                <div class="card__body">
+                                    <div class="form-header">
+                                        <h3 id="transactionTitle">New Purchase</h3>
+                                        <div class="invoice-number">
+                                            <span>Invoice #: <strong id="invoiceNumber">PUR-001</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="transactionDate">Date *</label>
+                                            <input type="date" id="transactionDate" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" id="partyLabel" for="partySelect">Supplier *</label>
+                                            <select id="partySelect" class="form-control" required>
+                                                <option value="">Select Supplier</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="products-section">
+                                        <div class="section-header">
+                                            <h4>Products</h4>
+                                            <button type="button" id="addProductBtn" class="btn btn--outline btn--sm">+ Add Product</button>
+                                        </div>
+
+                                        <div class="products-table">
+                                            <table class="data-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Quantity</th>
+                                                        <th>Rate</th>
+                                                        <th>Amount</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="productsList"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="transaction-totals">
+                                        <div class="totals-row">
+                                            <label>Subtotal:</label>
+                                            <span id="subtotalAmount">₹0.00</span>
+                                        </div>
+                                        <div class="totals-row">
+                                            <label>Tax (%):</label>
+                                            <input type="number" id="taxRate" class="form-control inline-input" min="0" max="100" step="0.01" value="0">
+                                            <span id="taxAmount">₹0.00</span>
+                                        </div>
+                                        <div class="totals-row total">
+                                            <label>Total Amount:</label>
+                                            <span id="totalAmount">₹0.00</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="button" id="resetTransactionBtn" class="btn btn--outline">Reset</button>
+                                        <button type="button" id="saveTransactionBtn" class="btn btn--secondary">Save Transaction</button>
+                                        <button type="button" id="generateInvoiceBtn" class="btn btn--primary">Generate Invoice</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory View -->
+                <div id="inventoryView" class="view-content">
+                    <div class="view-header">
+                        <div class="view-title">
+                            <h2>Inventory Management</h2>
+                            <p>Manage your products and stock levels</p>
+                        </div>
+                        <div class="view-actions" style="display: flex; gap: 10px;">
+                            <button id="manageCategoriesBtn" class="btn btn--outline">
+                                <span class="btn-icon">🗂️</span> Manage Categories
+                            </button>
+                            <button id="addInventoryProductBtn" class="btn btn--primary">
+                                <span class="btn-icon">+</span> Add Product
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="inventory-content">
+                        <div class="inventory-stats">
+                            <div class="stat-card card">
+                                <div class="card__body">
+                                    <h4 id="totalProductsCount">0</h4>
+                                    <p>Total Products</p>
+                                </div>
+                            </div>
+                            <div class="stat-card card">
+                                <div class="card__body">
+                                    <h4 id="totalStockValue">₹0</h4>
+                                    <p>Stock Value</p>
+                                </div>
+                            </div>
+                            <div class="stat-card card">
+                                <div class="card__body">
+                                    <h4 id="lowStockProductsCount">0</h4>
+                                    <p>Low Stock Items</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="products-table-container card">
+                            <div class="card__header">
+                                <h3>Products List</h3>
+                                <div class="table-actions">
+                                    <input type="text" id="productSearchInput" class="form-control" placeholder="Search products...">
+                                </div>
+                            </div>
+                            <div class="card__body">
+                                <div class="table-responsive">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>SKU</th>
+                                                <th>Product Name</th>
+                                                <th>Category</th>
+                                                <th>Purchase Price</th>
+                                                <th>Sale Price</th>
+                                                <th>Current Stock</th>
+                                                <th>Stock Value</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productsTableBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suppliers View -->
+                <div id="suppliersView" class="view-content">
+                    <div class="view-header">
+                        <div class="view-title">
+                            <h2>Supplier Management</h2>
+                            <p>Manage your suppliers and vendors</p>
+                        </div>
+                        <div class="view-actions">
+                            <button id="addSupplierBtn" class="btn btn--primary">+ Add Supplier</button>
+                        </div>
+                    </div>
+                    <div class="suppliers-content">
+                        <div class="suppliers-grid" id="suppliersGrid"></div>
+                    </div>
+                </div>
+
+                <!-- Customers View -->
+                <div id="customersView" class="view-content">
+                    <div class="view-header">
+                        <div class="view-title">
+                            <h2>Customer Management</h2>
+                            <p>Manage your customers and clients</p>
+                        </div>
+                        <div class="view-actions">
+                            <button id="addCustomerBtn" class="btn btn--primary">+ Add Customer</button>
+                        </div>
+                    </div>
+                    <div class="customers-content">
+                        <div class="customers-grid" id="customersGrid"></div>
+                    </div>
+                </div>
+
+                <!-- Reports View -->
+                <div id="reportsView" class="view-content">
+                    <div class="view-header">
+                        <h2>Business Reports</h2>
+                        <p>Comprehensive business analytics and reports</p>
+                    </div>
+                    <div class="reports-content">
+                        <div class="reports-grid">
+                            <div class="report-card card">
+                                <div class="card__header"><h3>Sales Report</h3></div>
+                                <div class="card__body">
+                                    <p>Detailed sales analysis and trends</p>
+                                    <button class="btn btn--primary" data-report="sales">Generate Report</button>
+                                </div>
+                            </div>
+                            <div class="report-card card">
+                                <div class="card__header"><h3>Purchase Report</h3></div>
+                                <div class="card__body">
+                                    <p>Purchase history and supplier analysis</p>
+                                    <button class="btn btn--primary" data-report="purchase">Generate Report</button>
+                                </div>
+                            </div>
+                            <div class="report-card card">
+                                <div class="card__header"><h3>Inventory Report</h3></div>
+                                <div class="card__body">
+                                    <p>Current stock levels and valuation</p>
+                                    <button class="btn btn--primary" data-report="inventory">Generate Report</button>
+                                </div>
+                            </div>
+                            <div class="report-card card">
+                                <div class="card__header"><h3>Profit &amp; Loss</h3></div>
+                                <div class="card__body">
+                                    <p>Financial performance overview</p>
+                                    <button class="btn btn--primary" data-report="profit-loss">Generate Report</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Settings View -->
+                <div id="settingsView" class="view-content">
+                    <div class="view-header">
+                        <h2>Business Settings</h2>
+                        <p>Customize your business information and preferences</p>
+                    </div>
+
+                    <div class="settings-content">
+                        <!-- Business Info -->
+                        <div class="settings-form card">
+                            <div class="card__header"><h3>Business Information</h3></div>
+                            <div class="card__body">
+                                <form id="businessSettingsForm">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="settingsBusinessName">Business Name</label>
+                                            <input type="text" id="settingsBusinessName" class="form-control" placeholder="Enter business name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="settingsProprietorName">Owner/Proprietor Name</label>
+                                            <input type="text" id="settingsProprietorName" class="form-control" placeholder="Enter owner name">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="settingsBusinessType">Business Type</label>
+                                            <input type="text" id="settingsBusinessType" class="form-control" placeholder="Enter business type">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="settingsGstNumber">Tax/GST Number</label>
+                                            <input type="text" id="settingsGstNumber" class="form-control" placeholder="Enter tax/GST number">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="settingsBusinessPhone">Phone Number</label>
+                                            <input type="tel" id="settingsBusinessPhone" class="form-control" placeholder="Enter phone number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="settingsBusinessEmail">Email Address</label>
+                                            <input type="email" id="settingsBusinessEmail" class="form-control" placeholder="Enter email address">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="settingsBusinessAddress">Business Address</label>
+                                        <textarea id="settingsBusinessAddress" class="form-control" rows="3" placeholder="Enter complete business address"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="settingsBusinessWebsite">Website</label>
+                                        <input type="url" id="settingsBusinessWebsite" class="form-control" placeholder="https://www.yourbusiness.com">
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn--primary">Save Settings</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Bank Details Section -->
+                        <div class="bank-details-section card">
+                            <div class="card__header">
+                                <h3>🏦 Bank Details &amp; Payment QR</h3>
+                                <p style="margin:0; color: var(--gray-500); font-size: 0.875rem;">These details will auto-print on every sales invoice</p>
+                            </div>
+                            <div class="card__body">
+                                <form id="bankDetailsForm">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="bankName">Bank Name</label>
+                                            <input type="text" id="bankName" class="form-control" placeholder="e.g. State Bank of India">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="accountNumber">Account Number</label>
+                                            <input type="text" id="accountNumber" class="form-control" placeholder="e.g. 1234567890">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="accountHolderName">Account Holder Name</label>
+                                            <input type="text" id="accountHolderName" class="form-control" placeholder="e.g. Rahul Sharma">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="ifscCode">IFSC Code</label>
+                                            <input type="text" id="ifscCode" class="form-control" placeholder="e.g. SBIN0001234" style="text-transform: uppercase;">
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn--primary">Save Bank Details</button>
+                                    </div>
+                                </form>
+
+                                <!-- QR Code Upload -->
+                                <div class="qr-upload-section">
+                                    <h4 class="qr-section-title">Payment QR Code</h4>
+                                    <p class="qr-section-desc">Upload your UPI / bank payment QR code. It will appear on sales invoices.</p>
+                                    <div class="qr-upload-area" id="qrUploadArea">
+                                        <div class="qr-preview-wrapper" id="qrPreviewWrapper" style="display: none;">
+                                            <img id="qrPreviewImg" class="qr-preview-img" src="" alt="Payment QR Code">
+                                            <button type="button" id="removeQrBtn" class="qr-remove-btn">✕ Remove</button>
+                                        </div>
+                                        <div class="qr-upload-placeholder" id="qrUploadPlaceholder">
+                                            <span class="qr-upload-icon">📷</span>
+                                            <p>Click to upload your QR code image</p>
+                                            <span class="qr-upload-hint">PNG, JPG up to 500KB</span>
+                                        </div>
+                                        <input type="file" id="qrFileInput" accept="image/*" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Categories Management -->
+                        <div class="categories-section card">
+                            <div class="card__header">
+                                <h3>Product Categories</h3>
+                                <button id="addCategoryBtn" class="btn btn--outline btn--sm">+ Add Category</button>
+                            </div>
+                            <div class="card__body">
+                                <div id="settingsCategoriesList" class="categories-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  Category Management Modal (standalone)            -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="categoryManagementModal" class="modal-standalone hidden">
+        <div class="modal-standalone-backdrop" id="categoryModalBackdrop"></div>
+        <div class="modal-standalone-content">
+            <div class="modal-header">
+                <h3>Manage Categories</h3>
+                <button class="modal-close-standalone" id="closeCategoryModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" id="newCategoryName" class="form-control" placeholder="New category name">
+                        <button id="addCategoryInlineBtn" class="btn btn--primary">Add</button>
+                    </div>
+                </div>
+                <div id="categoriesList" class="categories-list" style="margin-top: 1rem; max-height: 350px; overflow-y: auto;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn--outline" id="closeCategoryModal2">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  Modals Overlay                                     -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+        <!-- Product Modal -->
+        <div id="productModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="productModalTitle">Add New Product</h3>
+                    <button class="modal-close" data-modal="productModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="productName">Product Name *</label>
+                                <input type="text" id="productName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="productSKU">SKU *</label>
+                                <input type="text" id="productSKU" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="productCategory">Category *</label>
+                                <select id="productCategory" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="productUnit">Unit *</label>
+                                <div class="searchable-select-wrapper">
+                                    <input type="text" id="productUnitSearch" class="form-control" placeholder="Search unit..." autocomplete="off">
+                                    <div class="searchable-dropdown" id="productUnitDropdown">
+                                        <div class="unit-option" data-value="Bag">BAGS (Bag)</div>
+                                        <div class="unit-option" data-value="Btl">BOTTLES (Btl)</div>
+                                        <div class="unit-option" data-value="Box">BOX (Box)</div>
+                                        <div class="unit-option" data-value="Bdl">BUNDLES (Bdl)</div>
+                                        <div class="unit-option" data-value="Can">CANS (Can)</div>
+                                        <div class="unit-option" data-value="Ctn">CARTONS (Ctn)</div>
+                                        <div class="unit-option" data-value="Dzn">DOZENS (Dzn)</div>
+                                        <div class="unit-option" data-value="Gm">GRAMMES (Gm)</div>
+                                        <div class="unit-option" data-value="Kg">KILOGRAMS (Kg)</div>
+                                        <div class="unit-option" data-value="Ltr">LITRE (Ltr)</div>
+                                        <div class="unit-option" data-value="Ml">MILILITRE (Ml)</div>
+                                        <div class="unit-option" data-value="Mtr">METERS (Mtr)</div>
+                                        <div class="unit-option" data-value="Nos">NUMBERS (Nos)</div>
+                                        <div class="unit-option" data-value="Pac">PACKS (Pac)</div>
+                                        <div class="unit-option" data-value="Prs">PAIRS (Prs)</div>
+                                        <div class="unit-option" data-value="Pcs">PIECES (Pcs)</div>
+                                        <div class="unit-option" data-value="Qtl">QUINTAL (Qtl)</div>
+                                        <div class="unit-option" data-value="Rol">ROLLS (Rol)</div>
+                                        <div class="unit-option" data-value="Sqf">SQUARE FEET (Sqf)</div>
+                                        <div class="unit-option" data-value="Sqm">SQUARE METERS (Sqm)</div>
+                                        <div class="unit-option" data-value="Tbs">TABLETS (Tbs)</div>
+                                    </div>
+                                    <input type="hidden" id="productUnit" name="productUnit">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="productPurchasePrice">Purchase Price *</label>
+                                <input type="number" id="productPurchasePrice" class="form-control" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="productSalePrice">Sale Price *</label>
+                                <input type="number" id="productSalePrice" class="form-control" step="0.01" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="productCurrentStock">Current Stock</label>
+                                <input type="number" id="productCurrentStock" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="productReorderLevel">Reorder Level</label>
+                                <input type="number" id="productReorderLevel" class="form-control" min="0" value="10">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="productDescription">Description</label>
+                            <textarea id="productDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline modal-close" data-modal="productModal">Cancel</button>
+                    <button type="button" id="saveProductBtn" class="btn btn--primary">Save Product</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supplier Modal -->
+        <div id="supplierModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="supplierModalTitle">Add New Supplier</h3>
+                    <button class="modal-close" data-modal="supplierModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="supplierForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="supplierName">Supplier Name *</label>
+                                <input type="text" id="supplierName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="supplierContact">Contact Person</label>
+                                <input type="text" id="supplierContact" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="supplierPhone">Phone Number</label>
+                                <input type="tel" id="supplierPhone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="supplierEmail">Email Address</label>
+                                <input type="email" id="supplierEmail" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="supplierAddress">Address</label>
+                            <textarea id="supplierAddress" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="supplierSpeciality">Speciality/Products</label>
+                                <input type="text" id="supplierSpeciality" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="supplierPaymentTerms">Payment Terms</label>
+                                <input type="text" id="supplierPaymentTerms" class="form-control" value="30 days">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="supplierGST">Tax/GST Number</label>
+                            <input type="text" id="supplierGST" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline modal-close" data-modal="supplierModal">Cancel</button>
+                    <button type="button" id="saveSupplierBtn" class="btn btn--primary">Save Supplier</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Modal -->
+        <div id="customerModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="customerModalTitle">Add New Customer</h3>
+                    <button class="modal-close" data-modal="customerModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="customerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="customerName">Customer Name *</label>
+                                <input type="text" id="customerName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="customerPhone">Phone Number</label>
+                                <input type="tel" id="customerPhone" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="customerEmail">Email Address</label>
+                                <input type="email" id="customerEmail" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="customerGST">Tax/GST Number</label>
+                                <input type="text" id="customerGST" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="customerAddress">Address</label>
+                            <textarea id="customerAddress" class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline modal-close" data-modal="customerModal">Cancel</button>
+                    <button type="button" id="saveCustomerBtn" class="btn btn--primary">Save Customer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Modal -->
+        <div id="categoryModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="categoryModalTitle">Add New Category</h3>
+                    <button class="modal-close" data-modal="categoryModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <div class="form-group">
+                            <label class="form-label" for="categoryName">Category Name *</label>
+                            <input type="text" id="categoryName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="categoryDescription">Description</label>
+                            <textarea id="categoryDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="categoryIcon">Icon (Emoji)</label>
+                            <input type="text" id="categoryIcon" class="form-control" placeholder="📦" maxlength="2">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline modal-close" data-modal="categoryModal">Cancel</button>
+                    <button type="button" id="saveCategoryBtn" class="btn btn--primary">Save Category</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Product to Transaction Modal -->
+        <div id="addProductToTransactionModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add Product to Transaction</h3>
+                    <button class="modal-close" data-modal="addProductToTransactionModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductToTransactionForm">
+                        <div class="form-group">
+                            <label class="form-label" for="transactionProductSelect">Select Product *</label>
+                            <select id="transactionProductSelect" class="form-control" required>
+                                <option value="">Choose a product</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="productQuantity">Quantity *</label>
+                                <input type="number" id="productQuantity" class="form-control" min="1" step="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="productRate">Rate *</label>
+                                <input type="number" id="productRate" class="form-control" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount: <span id="productAmount">₹0.00</span></label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline modal-close" data-modal="addProductToTransactionModal">Cancel</button>
+                    <button type="button" id="addProductToTransactionBtn" class="btn btn--primary">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="utils.js"></script>
+    <script src="components.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

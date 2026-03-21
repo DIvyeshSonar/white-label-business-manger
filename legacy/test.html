@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Business Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="padding: 20px; text-align: center;">
+        <h1>Test Page</h1>
+        <p>If you can see this page, the HTML is working.</p>
+        <button onclick="testJS()">Test JavaScript</button>
+        <div id="testResult"></div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script>
+        function testJS() {
+            try {
+                // Test basic utilities
+                const testDiv = document.getElementById('testResult');
+                testDiv.innerHTML = '<p style="color: green;">✅ JavaScript is working!</p>';
+                
+                // Test DOM utility
+                if (typeof DOM !== 'undefined') {
+                    testDiv.innerHTML += '<p style="color: green;">✅ DOM utility loaded!</p>';
+                }
+                
+                // Test Format utility
+                if (typeof Format !== 'undefined') {
+                    testDiv.innerHTML += '<p style="color: green;">✅ Format utility loaded!</p>';
+                    testDiv.innerHTML += `<p>Sample currency: ${Format.currency(1234.56)}</p>`;
+                }
+                
+            } catch (error) {
+                document.getElementById('testResult').innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
