@@ -8,11 +8,43 @@ const Settings = () => {
   
   const [businessForm, setBusinessForm] = useState(store.businessInfo);
   const [bankForm, setBankForm] = useState(store.bankDetails);
+  const [errors, setErrors] = useState({});
+
+  const validateBusiness = () => {
+    const newErrors = {};
+    if (!businessForm.name || businessForm.name.length < 3) newErrors.name = "Company name must be at least 3 characters.";
+    if (!businessForm.proprietor) newErrors.proprietor = "Owner name is required.";
+    if (!businessForm.email || !/\S+@\S+\.\S+/.test(businessForm.email)) newErrors.email = "Please enter a valid email address.";
+    if (!businessForm.phone || !/^\d{10,12}$/.test(businessForm.phone.replace(/\D/g, ''))) newErrors.phone = "Enter a valid 10-digit phone number.";
+    if (!businessForm.address || businessForm.address.length < 5) newErrors.address = "Please provide a more complete address.";
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleUpdateBusiness = (e) => {
     e.preventDefault();
-    updateBusinessInfo(businessForm);
-    alert("Business information updated successfully!");
+    if (validateBusiness()) {
+      updateBusinessInfo(businessForm);
+      alert("Business information updated successfully!");
+    } else {
+      alert("Please fix the errors in your business information.");
+    }
+  };
+
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 1024 * 1024) { // 1MB limit for base64
+        alert("Logo file is too large. Please upload an image smaller than 1MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBusinessForm({ ...businessForm, logo: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleUpdateBank = (e) => {
@@ -57,67 +89,98 @@ const Settings = () => {
       <div className="card">
         {activeTab === 'business' && (
           <form className="card-body space-y-6" onSubmit={handleUpdateBusiness}>
+            {/* Logo Section */}
+            <div className="flex flex-col md:flex-row gap-6 items-center p-4 bg-gray-50 rounded-2xl border border-gray-100 mb-4">
+              <div className="w-24 h-24 bg-white border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center overflow-hidden relative group">
+                {businessForm.logo ? (
+                  <>
+                    <img src={businessForm.logo} alt="Logo" className="w-full h-full object-contain" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Upload size={20} className="text-white" />
+                    </div>
+                  </>
+                ) : (
+                  <Building2 size={32} className="text-gray-300" />
+                )}
+                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onChange={handleLogoUpload} />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-sm font-bold text-gray-900">Business Logo</h3>
+                <p className="text-xs text-gray-500 mt-1">Upload your brand logo. This will be displayed on all your invoices. (Max 1MB)</p>
+                <label className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-primary-600 hover:text-primary-700 cursor-pointer">
+                  <Upload size={14} />
+                  {businessForm.logo ? 'Change Logo' : 'Upload Logo'}
+                  <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} />
+                </label>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="col-span-2">
-                <label className="form-label">Business / Company Name</label>
+                <label className="form-label">Business / Company Name *</label>
                 <input 
                   type="text" 
-                  className="form-control" 
+                  className={`form-control ${errors.name ? 'border-red-500 focus:ring-red-500' : ''}`}
                   value={businessForm.name} 
                   onChange={(e) => setBusinessForm({...businessForm, name: e.target.value})} 
                 />
+                {errors.name && <p className="text-[10px] text-red-500 mt-1 font-medium">{errors.name}</p>}
               </div>
               <div>
-                 <label className="form-label">Owner Name</label>
+                 <label className="form-label">Owner Name *</label>
                  <input 
                    type="text" 
-                   className="form-control" 
+                   className={`form-control ${errors.proprietor ? 'border-red-500 focus:ring-red-500' : ''}`}
                    value={businessForm.proprietor} 
                    onChange={(e) => setBusinessForm({...businessForm, proprietor: e.target.value})} 
                  />
+                 {errors.proprietor && <p className="text-[10px] text-red-500 mt-1 font-medium">{errors.proprietor}</p>}
                </div>
                <div>
-                 <label className="form-label">Business Email</label>
+                 <label className="form-label">Business Email *</label>
                  <input 
                    type="email" 
-                   className="form-control" 
+                   className={`form-control ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
                    placeholder="e.g. contact@business.com"
                    value={businessForm.email} 
                    onChange={(e) => setBusinessForm({...businessForm, email: e.target.value})} 
                  />
+                 {errors.email && <p className="text-[10px] text-red-500 mt-1 font-medium">{errors.email}</p>}
                </div>
                <div>
-                 <label className="form-label">Business Phone</label>
+                 <label className="form-label">Business Phone *</label>
                  <input 
                    type="tel" 
-                   className="form-control" 
-                   placeholder="e.g. +91 98765 43210"
+                   className={`form-control ${errors.phone ? 'border-red-500 focus:ring-red-500' : ''}`}
+                   placeholder="e.g. 9876543210"
                    value={businessForm.phone} 
                    onChange={(e) => setBusinessForm({...businessForm, phone: e.target.value})} 
                  />
+                 {errors.phone && <p className="text-[10px] text-red-500 mt-1 font-medium">{errors.phone}</p>}
                </div>
               <div>
-                <label className="form-label">GST Number</label>
+                <label className="form-label">GST Number (Optional)</label>
                 <input 
                   type="text" 
                   className="form-control" 
                   value={businessForm.gst} 
-                  onChange={(e) => setBusinessForm({...businessForm, gst: e.target.value})} 
+                  onChange={(e) => setBusinessForm({...businessForm, gst: e.target.value.toUpperCase()})} 
                 />
               </div>
               <div className="col-span-2">
-                <label className="form-label">Business Address</label>
+                <label className="form-label">Business Address *</label>
                 <textarea 
-                  className="form-control h-20 resize-none" 
+                  className={`form-control h-20 resize-none ${errors.address ? 'border-red-500 focus:ring-red-500' : ''}`}
                   value={businessForm.address} 
                   onChange={(e) => setBusinessForm({...businessForm, address: e.target.value})} 
                 />
+                {errors.address && <p className="text-[10px] text-red-500 mt-1 font-medium">{errors.address}</p>}
               </div>
             </div>
             <div className="pt-4 border-t border-gray-100 flex justify-end">
-              <button type="submit" className="btn btn-primary gap-2">
+              <button type="submit" className="btn btn-primary gap-2 px-6">
                 <Save size={18} />
-                Save Changes
+                Save Business Profile
               </button>
             </div>
           </form>

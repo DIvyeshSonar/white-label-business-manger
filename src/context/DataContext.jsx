@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { useUser } from '@clerk/clerk-react';
+import { supabase } from '../lib/supabaseClient';
 
 const DataContext = createContext();
-
-const STORAGE_KEY_PREFIX = 'wlbm_data_';
 
 const defaultStore = {
   businessInfo: {
@@ -13,6 +12,7 @@ const defaultStore = {
     email: "",
     address: "",
     gst: "",
+    logo: "",
     setupComplete: false
   },
   bankDetails: {
@@ -67,37 +67,55 @@ const defaultStore = {
 export const DataProvider = ({ children }) => {
   const { user, isLoaded, isSignedIn } = useUser();
   const [store, setStore] = useState(defaultStore);
+  const [isDbLoaded, setIsDbLoaded] = useState(false);
 
-  // Load data when user signs in
+  // Load data from Supabase when user signs in
   useEffect(() => {
     if (isLoaded && isSignedIn && user) {
-      const storageKey = `${STORAGE_KEY_PREFIX}${user.id}`;
-      const savedData = localStorage.getItem(storageKey);
-      if (savedData) {
-        try {
-          setStore(JSON.parse(savedData));
-        } catch (e) {
-          console.error("Failed to parse store data", e);
-          setStore(defaultStore);
-        }
-      } else {
-        setStore(defaultStore);
-      }
+      setIsDbLoaded(false);
+      supabase
+        .from('user_data')
+        .select('store_data')
+        .eq('user_id', user.id)
+        .single()
+        .then(({ data, error }) => {
+          if (error && error.code !== 'PGRST116') {
+            // PGRST116 = row not found (new user), other errors we log
+            console.error('Failed to load data from Supabase:', error.message);
+          }
+          if (data && data.store_data) {
+            setStore(data.store_data);
+          } else {
+            setStore(defaultStore);
+          }
+          setIsDbLoaded(true);
+        });
     } else if (isLoaded && !isSignedIn) {
-      setStore(defaultStore); // clear store on logout
+      setStore(defaultStore);
+      setIsDbLoaded(false);
     }
   }, [user, isLoaded, isSignedIn]);
 
-  // Save data whenever store changes
+  // Save data to Supabase whenever store changes (after initial load)
   useEffect(() => {
-    if (isSignedIn && user && store !== defaultStore) {
-      const storageKey = `${STORAGE_KEY_PREFIX}${user.id}`;
-      localStorage.setItem(storageKey, JSON.stringify(store));
-    }
-  }, [store, isSignedIn, user]);
+    if (!isSignedIn || !user || !isDbLoaded) return;
+
+    supabase
+      .from('user_data')
+      .upsert({ user_id: user.id, store_data: store, updated_at: new Date().toISOString() }, { onConflict: 'user_id' })
+      .then(({ error }) => {
+        if (error) {
+          console.error('Failed to save data to Supabase:', error.message);
+        }
+      });
+  }, [store, isSignedIn, user, isDbLoaded]);
 
   const updateBusinessInfo = (info) => {
     setStore(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, ...info, setupComplete: true } }));
+  };
+
+  const updateBusinessLogo = (logo) => {
+    setStore(prev => ({ ...prev, businessInfo: { ...prev.businessInfo, logo } }));
   };
 
   const updateBankDetails = (details) => {
@@ -145,7 +163,7 @@ export const DataProvider = ({ children }) => {
     }));
   };
 
-  // Transactions logic ported from data.js
+  // Transactions logic
   const addTransaction = (transaction) => {
     const isPurchase = transaction.type === 'purchase';
     const id = store.counters.transactions;
@@ -161,7 +179,6 @@ export const DataProvider = ({ children }) => {
     };
 
     setStore(prev => {
-      // Process effects (stock changes, party metrics)
       let updatedProducts = [...prev.products];
       let updatedSuppliers = [...prev.suppliers];
       let updatedCustomers = [...prev.customers];
@@ -236,7 +253,9 @@ export const DataProvider = ({ children }) => {
   const contextValue = {
     store,
     isLoaded,
+    isDbLoaded,
     updateBusinessInfo,
+    updateBusinessLogo,
     updateBankDetails,
     updateBankQR,
     addEntity,

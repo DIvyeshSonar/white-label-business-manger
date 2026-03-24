@@ -85,56 +85,82 @@ const InvoiceGenerator = () => {
     const businessInfo = store.businessInfo;
     
     // Header
+    let currentY = 25;
+    let textX = 20;
+    
+    // Add Logo if exists (as a small icon to the left of name)
+    if (businessInfo.logo) {
+      try {
+        const logoSize = 12; // Smaller size for icon look
+        doc.addImage(businessInfo.logo, 'PNG', 20, currentY - 8, logoSize, logoSize);
+        textX = 35; // Move text to the right of the logo
+      } catch (e) {
+        console.error('Failed to add Business Logo to PDF', e);
+      }
+    }
+
     doc.setFontSize(22);
     doc.setTextColor(13, 148, 136); // Primary Color
-    doc.text(businessInfo.name || 'Your Business Name', 20, 25);
+    doc.text(businessInfo.name || 'Your Business Name', textX, currentY);
     
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(businessInfo.address || 'Business Address', 20, 35);
-    doc.text(`Phone: ${businessInfo.phone || 'N/A'}`, 20, 41);
-    doc.text(`Email: ${businessInfo.email || 'N/A'}`, 20, 47);
-    if (businessInfo.gst) {
-      doc.text(`GST: ${businessInfo.gst}`, 20, 53);
-    }
-    
-    // Invoice Details Right Aligned
     doc.setFontSize(18);
     doc.setTextColor(31, 41, 55);
     const invoiceType = transaction.type === 'purchase' ? 'PURCHASE INVOICE' : 'TAX INVOICE';
-    doc.text(invoiceType, 130, 25);
-    
+    doc.text(invoiceType, 130, currentY);
+
+    currentY += 10;
     doc.setFontSize(10);
     doc.setTextColor(100);
-    doc.text(`Invoice No: ${transaction.invoiceNumber}`, 130, 35);
-    doc.text(`Date: ${new Date(transaction.date).toLocaleDateString()}`, 130, 41);
+    doc.text(businessInfo.address || 'Business Address', textX, currentY);
+    doc.text(`Invoice No: ${transaction.invoiceNumber}`, 130, currentY);
+
+    currentY += 6;
+    doc.text(`Phone: ${businessInfo.phone || 'N/A'}`, textX, currentY);
+    doc.text(`Date: ${new Date(transaction.date).toLocaleDateString()}`, 130, currentY);
+
+    currentY += 6;
+    doc.text(`Email: ${businessInfo.email || 'N/A'}`, textX, currentY);
+    if (businessInfo.gst) {
+      currentY += 6;
+      doc.text(`GST: ${businessInfo.gst}`, textX, currentY);
+    }
     
     // Line Separator
+    currentY += 7;
     doc.setDrawColor(229, 231, 235);
-    doc.line(20, 60, 190, 60);
+    doc.line(20, currentY, 190, currentY);
 
     // Bill To
+    currentY += 10;
     doc.setFontSize(11);
     doc.setTextColor(31, 41, 55);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Bill To ${transaction.type === 'purchase' ? '(Supplier)' : '(Customer)'}:`, 20, 70);
+    doc.text(`Bill To ${transaction.type === 'purchase' ? '(Supplier)' : '(Customer)'}:`, 20, currentY);
+    
     doc.setFont('helvetica', 'normal');
-    doc.text(transaction.partyName, 20, 77);
-    if (transaction.partyAddress) doc.text(transaction.partyAddress, 20, 83);
-    if (transaction.partyPhone) doc.text(`Phone: ${transaction.partyPhone}`, 20, 89);
+    currentY += 7;
+    doc.text(transaction.partyName, 20, currentY);
+    if (transaction.partyAddress) {
+      currentY += 6;
+      doc.text(transaction.partyAddress, 20, currentY);
+    }
+    if (transaction.partyPhone) {
+      currentY += 6;
+      doc.text(`Phone: ${transaction.partyPhone}`, 20, currentY);
+    }
     
     // Products Table Header
-    let yPos = 105;
+    currentY += 16;
     doc.setFillColor(243, 244, 246);
-    doc.rect(20, yPos - 6, 170, 10, 'F');
+    doc.rect(20, currentY - 6, 170, 10, 'F');
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('Item Description', 25, yPos);
-    doc.text('Qty', 100, yPos);
-    doc.text('Rate', 130, yPos);
-    doc.text('Amount', 160, yPos);
+    doc.text('Item Description', 25, currentY);
+    doc.text('Qty', 100, currentY);
+    doc.text('Rate', 130, currentY);
+    doc.text('Amount', 160, currentY);
     
-    yPos += 10;
+    currentY += 10;
     doc.setFont('helvetica', 'normal');
     
     // Table Rows
@@ -142,41 +168,44 @@ const InvoiceGenerator = () => {
       // Alternating row colors
       if (i % 2 !== 0) {
         doc.setFillColor(249, 250, 251);
-        doc.rect(20, yPos - 6, 170, 10, 'F');
+        doc.rect(20, currentY - 6, 170, 10, 'F');
       }
-      doc.text(product.productName, 25, yPos);
-      doc.text(`${product.quantity} ${product.unit}`, 100, yPos);
-      doc.text(`Rs. ${product.rate.toFixed(2)}`, 130, yPos);
-      doc.text(`Rs. ${product.amount.toFixed(2)}`, 160, yPos);
-      yPos += 10;
+      doc.text(product.productName, 25, currentY);
+      doc.text(`${product.quantity} ${product.unit}`, 100, currentY);
+      doc.text(`Rs. ${product.rate.toFixed(2)}`, 130, currentY);
+      doc.text(`Rs. ${product.amount.toFixed(2)}`, 160, currentY);
+      currentY += 10;
     });
     
     // Totals Area
-    doc.line(20, yPos, 190, yPos);
-    yPos += 10;
+    doc.line(20, currentY, 190, currentY);
+    currentY += 10;
     
     doc.setFont('helvetica', 'bold');
-    doc.text('Total Amount:', 130, yPos);
+    doc.text('Total Amount:', 130, currentY);
     doc.setTextColor(13, 148, 136);
-    doc.text(`Rs. ${transaction.totalAmount.toFixed(2)}`, 160, yPos);
+    doc.text(`Rs. ${transaction.totalAmount.toFixed(2)}`, 160, currentY);
     
     // Bank Details (Only for Sales)
     if (transaction.type === 'sale' && store.bankDetails.accountNumber) {
-      yPos += 20;
+      currentY += 20;
       doc.setTextColor(31, 41, 55);
       doc.setFontSize(10);
-      doc.text('Bank Details for Payment:', 20, yPos);
+      doc.text('Bank Details for Payment:', 20, currentY);
       doc.setFont('helvetica', 'normal');
-      doc.text(`Bank: ${store.bankDetails.bankName}`, 20, yPos + 6);
-      doc.text(`A/C No: ${store.bankDetails.accountNumber}`, 20, yPos + 12);
-      doc.text(`IFSC: ${store.bankDetails.ifscCode}`, 20, yPos + 18);
+      currentY += 6;
+      doc.text(`Bank: ${store.bankDetails.bankName}`, 20, currentY);
+      currentY += 6;
+      doc.text(`A/C No: ${store.bankDetails.accountNumber}`, 20, currentY);
+      currentY += 6;
+      doc.text(`IFSC: ${store.bankDetails.ifscCode}`, 20, currentY);
       
       // QR Code check
       if (store.bankQR) {
         try {
-          doc.addImage(store.bankQR, 'JPEG', 150, yPos - 5, 30, 30);
+          doc.addImage(store.bankQR, 'JPEG', 150, currentY - 15, 30, 30);
           doc.setFontSize(8);
-          doc.text('Scan to Pay', 156, yPos + 28);
+          doc.text('Scan to Pay', 156, currentY + 18);
         } catch (e) {
              console.error('Failed to add QR Code to PDF', e);
         }
