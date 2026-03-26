@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserButton } from "@clerk/clerk-react";
+import { UserButton } from "@clerk/react";
 import { Building2, User, Phone, Mail, ArrowRight, ShieldCheck } from 'lucide-react';
 
 const SetupWizard = ({ onComplete }) => {

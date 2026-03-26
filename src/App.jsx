@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClerkProvider, SignedIn, SignedOut, UserButton, useClerk } from "@clerk/clerk-react";
+import { ClerkProvider, Show, UserButton, useClerk } from "@clerk/react";
 import { useData } from './context/DataContext';
 import LandingPage from './components/LandingPage';
 import DashboardLayout from './components/DashboardLayout';
@@ -11,17 +11,16 @@ function App() {
 
   return (
     <div className="min-h-screen font-sans text-gray-900 bg-background antialiased">
-      <SignedOut>
+      <Show when="signed-out">
         <LandingPage />
-      </SignedOut>
-
-      <SignedIn>
+      </Show>
+      <Show when="signed-in">
         {isSetupComplete ? (
           <DashboardLayout />
         ) : (
           <SetupWizard onComplete={(data) => updateBusinessInfo(data)} />
         )}
-      </SignedIn>
+      </Show>
     </div>
   );
 }

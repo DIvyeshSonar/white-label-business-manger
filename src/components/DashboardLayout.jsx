@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserButton } from "@clerk/clerk-react";
+import { UserButton } from "@clerk/react";
 import Dashboard from './Dashboard';
 import Inventory from './Inventory';
 import InvoiceGenerator from './InvoiceGenerator';
@@ -106,7 +106,6 @@ const DashboardLayout = () => {
           })}
         </nav>
       </aside>
-
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Header */}
@@ -124,7 +123,7 @@ const DashboardLayout = () => {
           </div>
           
           <div className="flex items-center gap-x-4 lg:gap-x-6">
-            <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: "w-9 h-9" } }} />
+            <UserButton appearance={{ elements: { avatarBox: "w-9 h-9" } }} />
           </div>
         </header>
 
@@ -133,7 +132,6 @@ const DashboardLayout = () => {
           {renderView()}
         </div>
       </main>
-
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div 
